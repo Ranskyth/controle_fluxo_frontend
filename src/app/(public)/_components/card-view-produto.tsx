@@ -11,11 +11,12 @@ interface Detalhes {
 }
 
 export const CardViewProduto = ({ id }: { id?: number }) => {
+
   const [Data, setData] = useState<Detalhes[]>([]);
 
   useEffect(() => {
     const RequestData = async () => {
-      const request = await fetch(`http://localhost:9090/api/produtos/${id}`);
+      const request = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos/${id}`);
       const json = await request.json();
 
       setData(json);

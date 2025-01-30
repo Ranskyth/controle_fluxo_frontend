@@ -28,7 +28,7 @@ export default function Estoque() {
   const [IdCardView, setIdCardView] = useState(0);
 
   const handleDeleta = async (id: number) => {
-    await fetch(`http://localhost:9090/api/produtos/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API}/produtos/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export default function Estoque() {
 
   useEffect(() => {
     const produtos = async () => {
-      const data = await fetch("http://localhost:9090/api/produtos");
+      const data = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos`);
       const datajson = await data.json();
       setData(datajson);
     };
