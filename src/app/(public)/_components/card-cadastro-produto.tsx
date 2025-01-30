@@ -17,7 +17,7 @@ export const CardCadastroProduto = () => {
       descricao: formData.get("descricao") as string,
     };
     try {
-      const fet = await fetch(`{process.env.NEXT_PUBLIC_API}/produtos`, {
+      const fet = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
