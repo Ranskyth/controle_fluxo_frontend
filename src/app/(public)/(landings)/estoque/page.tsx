@@ -1,5 +1,5 @@
-'use client'
-import { Button } from "@/components/ui/button"
+"use client";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -7,89 +7,126 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/table";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { CardCadastroProduto } from "../../_components/card-cadastro-produto";
+import { CardViewProduto } from "../../_components/card-view-produto";
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-]
+interface Estoque {
+  id: number;
+  titulo: string;
+  quantidade: number;
+  preco: number;
+  descricao: string;
+}
 
 export default function Estoque() {
-    const router = useRouter()
+  const [Data, setData] = useState<Estoque[]>([]);
+  const [HiddenCadastro, setHiddenCadastro] = useState(false);
+  const [HiddenVer, serHiddenVer] = useState(false);
+  const [IdCardView, setIdCardView] = useState(0);
+
+  const handleDeleta = async (id: number) => {
+    await fetch(`http://localhost:9090/api/produtos/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  };
+
+  useEffect(() => {
+    const produtos = async () => {
+      const data = await fetch("http://localhost:9090/api/produtos");
+      const datajson = await data.json();
+      setData(datajson);
+    };
+    produtos();
+  }, []);
+
+  const router = useRouter();
+
+  if (!Data) {
+    return <div>Carregando...</div>;
+  }
+
   return (
-    <div className="flex p-28 justify-center gap-5">
-        <div className="w-full">
-            <div className="flex mb-4 justify-end">
-                <Button onClick={() => router.push("/estoque/cadastra")} className="p-5">Adicionar Novo Produto</Button>
-            </div>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">ID</TableHead>
-          <TableHead>Titulo</TableHead>
-          <TableHead>Quantidade</TableHead>
-          <TableHead className="text-right">Preço</TableHead>
-          <TableHead className="text-right">Ações</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
-            <TableCell className="flex justify-end gap-2">
-                <Button className="bg-[#aaaaaa] text-black">Visualizar</Button>
-                <Button className="bg-[#efff63] text-black">Atualizar</Button>
-                <Button className="bg-[#e64c4c] text-black">Deletar</Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div >
+
+      <div className="flex justify-center">
+        <h1 className="text-[32px] font-[600]">Estoque</h1>
+      </div>
+
+    <div className="flex h-screen p-14 justify-center gap-5">
+      {HiddenCadastro ? <CardCadastroProduto /> : null}
+          {HiddenVer ? (
+              <CardViewProduto id={IdCardView} />
+          ) : null}
+
+      <div className="w-full">
+        <div className="flex mb-4 justify-end">
+          <Button
+            onClick={() => {
+              if (!HiddenCadastro) {
+                setHiddenCadastro(true);
+              } else {
+                setHiddenCadastro(false);
+              }
+            }}
+            className="p-5"
+          >
+            {!HiddenCadastro ? "Cadastra Novo Produto" : "Voltar"}
+          </Button>
         </div>
+
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Titulo</TableHead>
+              <TableHead>Quantidade</TableHead>
+              <TableHead className="text-right">Preço</TableHead>
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {Data.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.id}</TableCell>
+                <TableCell>{item.titulo}</TableCell>
+                <TableCell>{item.quantidade}</TableCell>
+                <TableCell className="text-right">{item.preco}</TableCell>
+                <TableCell className="flex gap-2 justify-end">
+                  <Button
+                    onClick={() => {
+                      if (!HiddenVer) {
+                        serHiddenVer(true);
+                        setIdCardView(item.id);
+                      } else {
+                        serHiddenVer(false);
+                      }
+                    }}
+                    className="p-2"
+                  >
+                    Visualizar
+                  </Button>
+                  <Button
+                    onClick={() => router.push(`/estoque/edita/${item.id}`)}
+                    className="p-2"
+                  >
+                    Editar
+                  </Button>
+                  <Button className="p-2" onClick={() => handleDeleta(item.id)}>
+                    Deletar
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
-  )
+    </div>
+  );
 }

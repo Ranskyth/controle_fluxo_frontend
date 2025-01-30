@@ -1,4 +1,4 @@
-import { CardComponent } from "../../_components/card-component";
+import { CardComponent } from "../../_components/card-metricas";
 import { MetricasCaixa, MetricasProdutos } from "../../_components/metricas-component";
 
 export default function Home() {

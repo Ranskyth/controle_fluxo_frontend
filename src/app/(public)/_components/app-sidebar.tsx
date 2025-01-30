@@ -1,4 +1,4 @@
-import { Home } from "lucide-react"
+import { Home, BaggageClaim } from "lucide-react"
 import Link from "next/link"
 
 import {
@@ -11,11 +11,16 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+
 // Menu items.
 const items = [
   {
     url: "/",
     icon: Home,
+  },
+  {
+    url: "/estoque",
+    icon: BaggageClaim,
   }
 ]
 
@@ -26,7 +31,7 @@ export function AppSidebar() {
         <SidebarGroup>
   
           <SidebarGroupContent>
-            <SidebarMenu className="flex mt-3 flex-col items-center">
+            <SidebarMenu className="flex mt-16 flex-col items-center">
               {items.map((item, index) => (
                 <SidebarMenuItem key={index}>
                   <SidebarMenuButton className="hover:bg-[#b8b8b8]" asChild>
