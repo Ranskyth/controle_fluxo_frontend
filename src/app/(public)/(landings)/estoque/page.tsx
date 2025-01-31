@@ -8,10 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CardCadastroProduto } from "../../_components/card-cadastro-produto";
 import { CardViewProduto } from "../../_components/card-view-produto";
+import { CardEditarProduto } from "../../_components/card-editar-produto";
 
 interface Estoque {
   id: number;
@@ -21,11 +21,13 @@ interface Estoque {
   descricao: string;
 }
 
-export default function Estoque() {
+const Estoque = () => {
   const [Data, setData] = useState<Estoque[]>([]);
   const [HiddenCadastro, setHiddenCadastro] = useState(false);
   const [HiddenVer, serHiddenVer] = useState(false);
   const [IdCardView, setIdCardView] = useState(0);
+  const [HiddenEditar, setHiddenEditar] = useState(false);
+  const [loading, setloading] = useState(true);
 
   const handleDeleta = async (id: number) => {
     await fetch(`${process.env.NEXT_PUBLIC_API}/produtos/${id}`, {
@@ -39,94 +41,107 @@ export default function Estoque() {
   useEffect(() => {
     const produtos = async () => {
       const data = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos`);
+      setloading(false);
       const datajson = await data.json();
       setData(datajson);
     };
+
     produtos();
   }, []);
 
-  const router = useRouter();
-
-  if (!Data) {
-    return <div>Carregando...</div>;
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        Carregando...
+      </div>
+    );
   }
 
   return (
-    <div >
-
+    <div>
       <div className="flex justify-center">
         <h1 className="text-[32px] font-[600]">Estoque</h1>
       </div>
 
-    <div className="flex h-screen p-14 justify-center gap-5">
-      {HiddenCadastro ? <CardCadastroProduto /> : null}
-          {HiddenVer ? (
-              <CardViewProduto id={IdCardView} />
-          ) : null}
+      <div className="flex h-screen p-14 justify-center gap-5">
+        {HiddenCadastro ? <CardCadastroProduto /> : null}
+        {HiddenVer ? <CardViewProduto id={IdCardView} /> : null}
+        {HiddenEditar ? <CardEditarProduto id={1} /> : null}
 
-      <div className="w-full">
-        <div className="flex mb-4 justify-end">
-          <Button
-            onClick={() => {
-              if (!HiddenCadastro) {
-                setHiddenCadastro(true);
-              } else {
-                setHiddenCadastro(false);
-              }
-            }}
-            className="p-5"
-          >
-            {!HiddenCadastro ? "Cadastra Novo Produto" : "Voltar"}
-          </Button>
-        </div>
+        <div className="w-full">
+          <div className="flex mb-4 justify-end">
+            <Button
+              onClick={() => {
+                if (!HiddenCadastro) {
+                  setHiddenCadastro(true);
+                } else {
+                  setHiddenCadastro(false);
+                }
+              }}
+              className="p-5"
+            >
+              {!HiddenCadastro ? "Cadastra Novo Produto" : "Voltar"}
+            </Button>
+          </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">ID</TableHead>
-              <TableHead>Titulo</TableHead>
-              <TableHead>Quantidade</TableHead>
-              <TableHead className="text-right">Preço</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {Data.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell>{item.id}</TableCell>
-                <TableCell>{item.titulo}</TableCell>
-                <TableCell>{item.quantidade}</TableCell>
-                <TableCell className="text-right">{item.preco}</TableCell>
-                <TableCell className="flex gap-2 justify-end">
-                  <Button
-                    onClick={() => {
-                      if (!HiddenVer) {
-                        serHiddenVer(true);
-                        setIdCardView(item.id);
-                      } else {
-                        serHiddenVer(false);
-                      }
-                    }}
-                    className="p-2"
-                  >
-                    Visualizar
-                  </Button>
-                  <Button
-                    onClick={() => router.push(`/estoque/edita/${item.id}`)}
-                    className="p-2"
-                  >
-                    Editar
-                  </Button>
-                  <Button className="p-2" onClick={() => handleDeleta(item.id)}>
-                    Deletar
-                  </Button>
-                </TableCell>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">ID</TableHead>
+                <TableHead>Titulo</TableHead>
+                <TableHead>Quantidade</TableHead>
+                <TableHead className="text-right">Preço</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {Data.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.id}</TableCell>
+                  <TableCell>{item.titulo}</TableCell>
+                  <TableCell>{item.quantidade}</TableCell>
+                  <TableCell className="text-right">R$ {item.preco.toFixed(2)}</TableCell>
+                  <TableCell className="flex gap-2 justify-end">
+                    <Button
+                      onClick={() => {
+                        if (!HiddenVer) {
+                          serHiddenVer(true);
+                          setIdCardView(item.id);
+                        } else {
+                          serHiddenVer(false);
+                        }
+                      }}
+                      className="p-2"
+                    >
+                      Visualizar
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        if (!HiddenEditar) {
+                          setHiddenEditar(true);
+                        } else {
+                          setHiddenEditar(false);
+                        }
+                      }}
+                      className="p-2"
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      className="p-2"
+                      onClick={() => handleDeleta(item.id)}
+                    >
+                      Deletar
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
+
+export default Estoque
