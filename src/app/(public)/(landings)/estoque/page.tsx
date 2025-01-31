@@ -25,7 +25,7 @@ const Estoque = () => {
   const [Data, setData] = useState<Estoque[]>([]);
   const [HiddenCadastro, setHiddenCadastro] = useState(false);
   const [HiddenVer, serHiddenVer] = useState(false);
-  const [IdCardView, setIdCardView] = useState(0);
+  const [Id, setId] = useState(0);
   const [HiddenEditar, setHiddenEditar] = useState(false);
   const [loading, setloading] = useState(true);
 
@@ -65,8 +65,8 @@ const Estoque = () => {
 
       <div className="flex h-screen p-14 justify-center gap-5">
         {HiddenCadastro ? <CardCadastroProduto /> : null}
-        {HiddenVer ? <CardViewProduto id={IdCardView} /> : null}
-        {HiddenEditar ? <CardEditarProduto id={1} /> : null}
+        {HiddenVer ? <CardViewProduto id={Id} /> : null}
+        {HiddenEditar ? <CardEditarProduto id={Id} /> : null}
 
         <div className="w-full">
           <div className="flex mb-4 justify-end">
@@ -78,7 +78,7 @@ const Estoque = () => {
                   setHiddenCadastro(false);
                 }
               }}
-              className="p-5"
+              className="p-5 bg-[#555555]"
             >
               {!HiddenCadastro ? "Cadastra Novo Produto" : "Voltar"}
             </Button>
@@ -106,12 +106,12 @@ const Estoque = () => {
                       onClick={() => {
                         if (!HiddenVer) {
                           serHiddenVer(true);
-                          setIdCardView(item.id);
+                          setId(item.id);
                         } else {
                           serHiddenVer(false);
                         }
                       }}
-                      className="p-2"
+                      className="p-2 bg-[#727272]"
                     >
                       Visualizar
                     </Button>
@@ -119,16 +119,17 @@ const Estoque = () => {
                       onClick={() => {
                         if (!HiddenEditar) {
                           setHiddenEditar(true);
+                          setId(item.id)
                         } else {
                           setHiddenEditar(false);
                         }
                       }}
-                      className="p-2"
+                      className="p-2 bg-[#7fca8c]"
                     >
                       Editar
                     </Button>
                     <Button
-                      className="p-2"
+                      className="p-2 bg-[#c26666]"
                       onClick={() => handleDeleta(item.id)}
                     >
                       Deletar

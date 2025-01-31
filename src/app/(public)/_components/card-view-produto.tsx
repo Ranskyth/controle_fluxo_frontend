@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useEffect, useState } from "react";
-
+import {format} from "date-fns"
+import { ptBR } from "date-fns/locale"
 interface Detalhes {
   id: number;
   titulo: string;
@@ -9,7 +10,9 @@ interface Detalhes {
   createde_at: string;
   updated_at: string;
 }
-
+const formateData = (data:string) => {
+  return format(new Date(data), "dd/MM/yyyy | HH:mm", {locale: ptBR})
+}
 export const CardViewProduto = ({ id }: { id?: number }) => {
 
   const [Data, setData] = useState<Detalhes[]>([]);
@@ -37,8 +40,8 @@ export const CardViewProduto = ({ id }: { id?: number }) => {
               <h1>Titulo do Produto : {item.titulo}</h1>
               <h1>Preço do Produto : {item.preco}</h1>
               <h1>Quantidade do Produto : {item.quantidade}</h1>
-              <h1>Data de Criação : {item.createde_at}</h1>
-              <h1>Ultima Atualização : {item.updated_at}</h1>
+              <h1>Data de Criação : {formateData(item.createde_at)}</h1>
+              <h1>Ultima Atualização : {formateData(item.updated_at)}</h1>
             </div>
           );
         })}

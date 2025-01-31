@@ -4,12 +4,14 @@ import Link from "next/link"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { ButtonThemeProvider } from "@/components/button-theme-provider"
 
 
 // Menu items.
@@ -45,6 +47,12 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarGroup>
+
+        <ButtonThemeProvider/>
+        </SidebarGroup>
+      </SidebarFooter>
     </Sidebar>
   )
 }
