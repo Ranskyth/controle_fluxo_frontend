@@ -4,6 +4,7 @@ import "../globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ContextPageStateProvider } from "./_components/contextPageState";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -37,7 +38,10 @@ export default function RootLayout({
           >
           <SidebarProvider>
             <AppSidebar />
+            <ContextPageStateProvider>
+
             <main className="w-full h-full">{children}</main>
+            </ContextPageStateProvider>
           </SidebarProvider>
         </ThemeProvider>
       </body>

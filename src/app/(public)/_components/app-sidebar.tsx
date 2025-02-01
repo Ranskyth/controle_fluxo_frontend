@@ -1,5 +1,6 @@
-import { Home, BaggageClaim } from "lucide-react"
-import Link from "next/link"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Home, BaggageClaim, LogOut, ChartNoAxesCombined } from "lucide-react";
+import Link from "next/link";
 
 import {
   Sidebar,
@@ -10,11 +11,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { ButtonThemeProvider } from "@/components/button-theme-provider"
+} from "@/components/ui/sidebar";
+import { ButtonThemeProvider } from "@/components/button-theme-provider";
 
-
-// Menu items.
 const items = [
   {
     url: "/",
@@ -23,22 +22,25 @@ const items = [
   {
     url: "/estoque",
     icon: BaggageClaim,
-  }
-]
+  },
+  {
+    url: "/dashboard",
+    icon: ChartNoAxesCombined,
+  },
+];
 
 export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-  
           <SidebarGroupContent>
             <SidebarMenu className="flex mt-16 flex-col items-center">
               {items.map((item, index) => (
                 <SidebarMenuItem key={index}>
                   <SidebarMenuButton className="hover:bg-[#b8b8b8]" asChild>
                     <Link href={item.url}>
-                      <item.icon/>
+                      <item.icon />
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -48,11 +50,16 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarGroup>
+        <SidebarGroup className="flex flex-col gap-4">
+          <ButtonThemeProvider />
 
-        <ButtonThemeProvider/>
+          <SidebarMenuButton asChild>
+            <Link href={"/login"}>
+              <LogOut />
+            </Link>
+          </SidebarMenuButton>
         </SidebarGroup>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

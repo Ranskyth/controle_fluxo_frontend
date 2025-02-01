@@ -8,10 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CardCadastroProduto } from "../../_components/card-cadastro-produto";
 import { CardViewProduto } from "../../_components/card-view-produto";
 import { CardEditarProduto } from "../../_components/card-editar-produto";
+import { ContextPageState } from "../../_components/contextPageState";
 
 interface Estoque {
   id: number;
@@ -29,14 +30,20 @@ const Estoque = () => {
   const [HiddenEditar, setHiddenEditar] = useState(false);
   const [loading, setloading] = useState(true);
 
+  const {PageState, SetPageState} = useContext(ContextPageState)
+
   const handleDeleta = async (id: number) => {
     await fetch(`${process.env.NEXT_PUBLIC_API}/produtos/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
+      
     });
+    SetPageState(true)
   };
+
+  console.log(PageState)
 
   useEffect(() => {
     const produtos = async () => {
@@ -47,7 +54,7 @@ const Estoque = () => {
     };
 
     produtos();
-  }, []);
+  }, [PageState]);
 
   if (loading) {
     return (
