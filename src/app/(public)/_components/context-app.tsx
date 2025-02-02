@@ -18,7 +18,8 @@ export const ContextAppProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [PageState, setPageState] = useState<boolean>(false);
   const [isLogged, setIsLogged] = useState<boolean>(false);
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState<string | null>(null)
+
 
   const Login = (email: string, senha: string) => {
     if (email == "lucas@gmail.com" && senha == "123") {
@@ -31,13 +32,19 @@ export const ContextAppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   useEffect(() => {
+
+    setToken(localStorage.getItem("token"))
+
+    if(token === null) return 
+   
     if (token) {
       setIsLogged(true);
       router.push("/");
     } else {
       setIsLogged(false);
       router.push("/login");
-    }
+  
+}
   }, []);
 
   const Logged = () => {
