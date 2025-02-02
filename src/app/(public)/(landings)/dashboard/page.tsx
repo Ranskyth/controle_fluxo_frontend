@@ -1,7 +1,20 @@
+'use client'
+
+import { useContext } from "react";
 import { CardComponent } from "../../_components/card-metricas";
 import { MetricasCaixa, MetricasProdutos } from "../../_components/metricas-component";
+import { ContextApp } from "../../_components/context-app";
+
 
 export default function Home() {
+  const { Logged, isLogged } = useContext(ContextApp)
+
+  Logged()
+
+  if(!isLogged){
+    return null
+  }
+
   return (
     <div className="p-4 flex flex-col items-center gap-5">
       <div>

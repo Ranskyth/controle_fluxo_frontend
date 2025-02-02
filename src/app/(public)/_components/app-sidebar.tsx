@@ -1,4 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+"use client";
+
 import { Home, BaggageClaim, LogOut, ChartNoAxesCombined } from "lucide-react";
 import Link from "next/link";
 
@@ -13,6 +14,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { ButtonThemeProvider } from "@/components/button-theme-provider";
+import { useContext } from "react";
+import { ContextApp } from "./context-app";
 
 const items = [
   {
@@ -30,6 +33,8 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { Logout } = useContext(ContextApp);
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -53,10 +58,8 @@ export function AppSidebar() {
         <SidebarGroup className="flex flex-col gap-4">
           <ButtonThemeProvider />
 
-          <SidebarMenuButton asChild>
-            <Link href={"/login"}>
-              <LogOut />
-            </Link>
+          <SidebarMenuButton onClick={Logout}>
+            <LogOut />
           </SidebarMenuButton>
         </SidebarGroup>
       </SidebarFooter>

@@ -12,7 +12,9 @@ import { useContext, useEffect, useState } from "react";
 import { CardCadastroProduto } from "../../_components/card-cadastro-produto";
 import { CardViewProduto } from "../../_components/card-view-produto";
 import { CardEditarProduto } from "../../_components/card-editar-produto";
-import { ContextPageState } from "../../_components/contextPageState";
+
+import { ContextApp } from "../../_components/context-app";
+import { useRouter } from "next/navigation";
 
 interface Estoque {
   id: number;
@@ -23,14 +25,43 @@ interface Estoque {
 }
 
 const Estoque = () => {
+
+  const {Logged, isLogged, setPageState, PageState} = useContext(ContextApp)
+
+  
+  const router = useRouter()
   const [Data, setData] = useState<Estoque[]>([]);
   const [HiddenCadastro, setHiddenCadastro] = useState(false);
   const [HiddenVer, serHiddenVer] = useState(false);
   const [Id, setId] = useState(0);
   const [HiddenEditar, setHiddenEditar] = useState(false);
   const [loading, setloading] = useState(true);
+  
+  useEffect(() => {
+    const produtos = async () => {
+      const data = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos`);
+      setloading(false);
+      const datajson = await data.json();
+      setData(datajson);
+    };
+    
+    Logged()
+    produtos();
+  }, [PageState, router, Logged]);
+  
 
-  const {PageState, SetPageState} = useContext(ContextPageState)
+  if(!isLogged){
+    return null
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        Carregando...
+      </div>
+    );
+  }
+
 
   const handleDeleta = async (id: number) => {
     await fetch(`${process.env.NEXT_PUBLIC_API}/produtos/${id}`, {
@@ -40,29 +71,13 @@ const Estoque = () => {
       },
       
     });
-    SetPageState(true)
+    setPageState(true)
   };
+
+  
 
   console.log(PageState)
 
-  useEffect(() => {
-    const produtos = async () => {
-      const data = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos`);
-      setloading(false);
-      const datajson = await data.json();
-      setData(datajson);
-    };
-
-    produtos();
-  }, [PageState]);
-
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        Carregando...
-      </div>
-    );
-  }
 
   return (
     <div>

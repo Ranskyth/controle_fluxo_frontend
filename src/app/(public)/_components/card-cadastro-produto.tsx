@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { FormEvent, useContext } from "react";
-import { ContextPageState } from "./contextPageState";
+import { ContextApp } from "./context-app";
 
 export const CardCadastroProduto = () => {
-  const {SetPageState} = useContext(ContextPageState)
+  const {setPageState} = useContext(ContextApp)
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -33,7 +33,7 @@ export const CardCadastroProduto = () => {
     } catch (e) {
       console.log(e);
     }
-    SetPageState(true)
+    setPageState(true)
   };
 
   return (

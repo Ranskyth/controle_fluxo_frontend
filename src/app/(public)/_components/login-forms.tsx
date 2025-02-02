@@ -1,3 +1,5 @@
+'use client'
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,10 +11,27 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { FormEvent, useContext} from "react"
+import { ContextApp } from "./context-app"
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+
+  const {Login} = useContext(ContextApp)
+  const handleLogin = (e:FormEvent<HTMLFormElement>) => {
+    
+    e.preventDefault()
+
+    const form = new FormData(e.currentTarget)
+
+    const data = {
+      email : form.get("email") as string,
+      senha: form.get("password") as string
+    }
+    Login(data.email, data.senha)
+  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -23,11 +42,12 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
+                  name="email"
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -37,14 +57,8 @@ export function LoginForm({
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
                 </div>
-                <Input id="password" type="password" required />
+                <Input name="password" id="password" type="password" required />
               </div>
               <Button type="submit" className="w-full">
                 Login

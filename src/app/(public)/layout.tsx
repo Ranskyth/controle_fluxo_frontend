@@ -4,7 +4,7 @@ import "../globals.css";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ContextPageStateProvider } from "./_components/contextPageState";
+import { ContextAppProvider } from "./_components/context-app";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -30,20 +30,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ContextAppProvider>
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <SidebarProvider>
             <AppSidebar />
-            <ContextPageStateProvider>
-
-            <main className="w-full h-full">{children}</main>
-            </ContextPageStateProvider>
+              <main className="w-full h-full">{children}</main>
           </SidebarProvider>
         </ThemeProvider>
+            </ContextAppProvider>
       </body>
     </html>
   );
