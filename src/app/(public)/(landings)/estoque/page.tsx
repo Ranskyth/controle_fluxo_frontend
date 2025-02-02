@@ -28,6 +28,7 @@ const Estoque = () => {
 
   const {Logged, isLogged, setPageState, PageState} = useContext(ContextApp)
 
+  Logged()
   
   const router = useRouter()
   const [Data, setData] = useState<Estoque[]>([]);
@@ -45,10 +46,8 @@ const Estoque = () => {
       setData(datajson);
     };
     
-    Logged()
     produtos();
   }, [PageState, router, Logged]);
-  
 
   if(!isLogged){
     return null
@@ -62,7 +61,6 @@ const Estoque = () => {
     );
   }
 
-
   const handleDeleta = async (id: number) => {
     await fetch(`${process.env.NEXT_PUBLIC_API}/produtos/${id}`, {
       method: "DELETE",
@@ -73,11 +71,6 @@ const Estoque = () => {
     });
     setPageState(true)
   };
-
-  
-
-  console.log(PageState)
-
 
   return (
     <div>
