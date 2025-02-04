@@ -77,7 +77,7 @@ const Caixa = () => {
     if (arg === "") {
       return;
     }
-    const data = await fetch(`http://localhost:9090/api/produtos/nome/${arg}`);
+    const data = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos/nome/${arg}`);
     const datajson = data.json();
     setProduto(await datajson);
   };
