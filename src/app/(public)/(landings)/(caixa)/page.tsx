@@ -34,23 +34,43 @@ const CardVenda = (dados: Estoque) => {
   const [Qtproduto, setQtproduto] = useState<number>(1);
   return (
     <Card className="absolute z-10">
-      <CardHeader>
-        <CardTitle>{dados.titulo}</CardTitle>
+      <CardHeader className="flex items-center">
+        <CardTitle className="text-[1.5rem]">Venda de {dados.titulo}</CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className="flex flex-col gap-6">
+        <CardDescription className="flex items-center gap-12">
+          <div className="flex flex-col gap-2">
+          <h1>Produto : {dados.titulo}</h1>
+          <h1>Codigo Produto : {dados.id}</h1>
           <h1>Quantidade em Estoque : {dados.quantidade}</h1>
-          <h1>Preço Unitario : R$ {dados.preco}</h1>
+          <h1>Preço : R$ {dados.preco}</h1>
           <div className="flex gap-2 items-center">
             <Button onClick={() => setQtproduto((prev) => prev - 1)}>-</Button>
             {Qtproduto}
             <Button onClick={() => setQtproduto((prev) => prev + 1)}>+</Button>
           </div>
+          </div>
 
+          <div className="flex flex-col gap-3">
+            <h1 className="text-[1.5rem]">Forma De Pagamento</h1>
           <Button className="bg-green-500">
-            Confirmar Venda ( R${" "}
+            Confirmar Venda via Pix ( R${" "}
             {(Number(dados.preco || 0) * Qtproduto).toFixed(2)})
           </Button>
+          <Button className="bg-green-500">
+            Confirmar Venda via Cartão de Crédito ( R${" "}
+            {(Number(dados.preco || 0) * Qtproduto).toFixed(2)})
+          </Button>
+          <Button className="bg-green-500">
+            Confirmar Venda via Cartão de Débito ( R${" "}
+            {(Number(dados.preco || 0) * Qtproduto).toFixed(2)})
+          </Button>
+          <Button className="bg-green-500">
+            Confirmar Venda via Dinheiro ( R${" "}
+            {(Number(dados.preco || 0) * Qtproduto).toFixed(2)})
+          </Button>
+          </div>
+
         </CardDescription>
       </CardContent>
     </Card>
