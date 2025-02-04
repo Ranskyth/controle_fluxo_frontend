@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-
 "use client";
 import { ChangeEvent, useContext, useState } from "react";
 
