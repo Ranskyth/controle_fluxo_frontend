@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ContextApp } from "../../_components/context-app";
+import { Input } from "@/components/ui/input";
 
 interface Estoque {
   id?: number;
@@ -109,7 +110,7 @@ const Caixa = () => {
       <div className="flex w-full flex-col items-center p-14">
         <h1 className="text-[42px] mb-9">Frente de Caixa</h1>
         <div className="w-full h-[34px]">
-          <input
+          <Input
             className="h-full w-full rounded-[8px]"
             type="text"
             onChange={(e) => handleProduto(e)}
