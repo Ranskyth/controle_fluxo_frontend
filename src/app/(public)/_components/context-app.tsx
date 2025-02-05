@@ -19,6 +19,12 @@ export const ContextAppProvider = ({ children }: { children: ReactNode }) => {
   const [PageState, setPageState] = useState<boolean>(false);
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
+  if(PageState === true){
+    setTimeout(() => {
+      setPageState(false)
+    },500)
+  }
+
   const Login = (email: string, senha: string) => {
     if (email == "lucas@gmail.com" && senha == "123") {
       localStorage.setItem("token", "fake token");

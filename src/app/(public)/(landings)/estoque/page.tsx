@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,19 +26,19 @@ interface Estoque {
 }
 
 const Estoque = () => {
+ // const { Logged, isLogged, setPageState, PageState } = useContext(ContextApp);
 
-  const {Logged, isLogged, setPageState, PageState} = useContext(ContextApp)
+ // Logged();
 
-  Logged()
-  
-  const router = useRouter()
+  const router = useRouter();
   const [Data, setData] = useState<Estoque[]>([]);
   const [HiddenCadastro, setHiddenCadastro] = useState(false);
   const [HiddenVer, serHiddenVer] = useState(false);
   const [Id, setId] = useState(0);
+  const [ProdutoData, setProdutoData] = useState<Estoque>({} as Estoque);
   const [HiddenEditar, setHiddenEditar] = useState(false);
   const [loading, setloading] = useState(true);
-  
+
   useEffect(() => {
     const produtos = async () => {
       const data = await fetch(`${process.env.NEXT_PUBLIC_API}/produtos`);
@@ -45,13 +46,13 @@ const Estoque = () => {
       const datajson = await data.json();
       setData(datajson);
     };
-    
-    produtos();
-  }, [PageState, router, Logged]);
 
-  if(!isLogged){
-    return null
-  }
+    produtos();
+  }, [/*PageState*/, router, /*Logged*/]);
+
+ // if (!isLogged) {
+ //   return null;
+ // }
 
   if (loading) {
     return (
@@ -67,9 +68,8 @@ const Estoque = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      
     });
-    setPageState(true)
+    //setPageState(true);
   };
 
   return (
@@ -81,7 +81,15 @@ const Estoque = () => {
       <div className="flex h-screen p-14 justify-center gap-5">
         {HiddenCadastro ? <CardCadastroProduto /> : null}
         {HiddenVer ? <CardViewProduto id={Id} /> : null}
-        {HiddenEditar ? <CardEditarProduto id={Id} /> : null}
+        {HiddenEditar ? (
+          <CardEditarProduto
+            Id={ProdutoData.id}
+            Titulo={ProdutoData.titulo}
+            Preco={ProdutoData.preco}
+            Quantidade={ProdutoData.quantidade}
+            Descricao={ProdutoData.descricao}
+          />
+        ) : null}
 
         <div className="w-full">
           <div className="flex mb-4 justify-end">
@@ -115,7 +123,9 @@ const Estoque = () => {
                   <TableCell>{item.id}</TableCell>
                   <TableCell>{item.titulo}</TableCell>
                   <TableCell>{item.quantidade}</TableCell>
-                  <TableCell className="text-right">R$ {item.preco.toFixed(2)}</TableCell>
+                  <TableCell className="text-right">
+                    R$ {item.preco.toFixed(2)}
+                  </TableCell>
                   <TableCell className="flex gap-2 justify-end">
                     <Button
                       onClick={() => {
@@ -134,7 +144,7 @@ const Estoque = () => {
                       onClick={() => {
                         if (!HiddenEditar) {
                           setHiddenEditar(true);
-                          setId(item.id)
+                          setProdutoData(item);
                         } else {
                           setHiddenEditar(false);
                         }
@@ -158,6 +168,6 @@ const Estoque = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Estoque
+export default Estoque;
