@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "./_components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ContextAppProvider } from "./_components/context-app";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
